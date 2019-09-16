@@ -1,0 +1,508 @@
+// Copyright (c) 2017-2019 Telos Foundation & contributors
+// Distributed under the MIT software license, see the accompanying
+// file COPYING or http://www.opensource.org/licenses/mit-license.php.
+
+#include "xtransport/udp_transport/udp_transport.h"
+
+#include <stdio.h>
+#include <mutex>
+#include <iostream>
+#include <string>
+
+#include "xbase/xcontext.h"
+#include "xpbase/base/line_parser.h"
+#include "xpbase/base/top_utils.h"
+#include "xpbase/base/top_log.h"
+#include "xtransport/utils/transport_utils.h"
+#include "xtransport/message_manager/multi_message_handler.h"
+
+using namespace top;
+using namespace top::base;
+
+namespace top {
+
+namespace transport {
+//notify the child endpont is ready to use when receive on_endpoint_open of error_code = enum_xcode_successful
+bool xp2pudp_t::on_endpoint_open(const int32_t error_code,const int32_t cur_thread_id,const uint64_t timenow_ms,xendpoint_t* from_child)
+{
+    const int result = xudp_t::on_endpoint_open(error_code,cur_thread_id,timenow_ms,from_child);
+    //add code here
+//        printf("-------------------------------\n");
+    TOP_INFO("xp2pudp_t connected successful,handle(%d),local address[%s : %d]-[%d : %d] vs  peer address[%s : %d]-[%d : %d]; cur_thread_id=%d,object_id(%ld) for this(%p)",
+        get_handle(), get_local_ip_address().c_str(),get_local_real_port(),get_local_logic_port(),get_local_logic_port_token(),
+        get_peer_ip_address().c_str(),get_peer_real_port(),get_peer_logic_port(),get_peer_logic_port_token(),get_thread_id(),get_obj_id(),this);
+    status = 2;
+    if (listen_server_ != NULL) {
+        listen_server_->AddXudp(xslsocket_t::get_peer_ip_address() +":" + std::to_string(xslsocket_t::get_peer_real_port()), this);
+/*      std::map<std::string, xp2pudp_t*>::iterator iter;
+        
+        listen_server_->xudp_mutex_.lock();
+        iter = listen_server_->xudp_client_map.find(xslsocket_t::get_peer_ip_address() +":" + std::to_string(xslsocket_t::get_peer_real_port()));
+        if (iter == listen_server_->xudp_client_map.end()) {
+            listen_server_->xudp_mutex_.unlock();
+            listen_server_->AddXudp(xslsocket_t::get_peer_ip_address() +":" + std::to_string(xslsocket_t::get_peer_real_port()), this);
+        
+            listen_server_->xudp_mutex_.lock();
+            std::map<std::string, xp2pudp_t*>::iterator it;
+            for (it= listen_server_->xudp_client_map.begin(); it != listen_server_->xudp_client_map.end(); ++it) {
+                TOP_INFO("conn:print xudp map:%s,%p",it->first.c_str(), it->second);
+            }       
+            listen_server_->xudp_mutex_.unlock();
+        } else {
+            listen_server_->xudp_mutex_.unlock();
+            TOP_INFO("find xudp client.");
+        }*/
+    } else {
+        TOP_INFO("listen_server_ is null");
+    }
+    mtx.unlock();
+    return result;
+}
+//when associated io-object close happen,post the event to receiver
+//error_code is 0 when it is closed by caller/upper layer
+bool xp2pudp_t::on_endpoint_close(const int32_t error_code,const int32_t cur_thread_id,const uint64_t timenow_ms,xendpoint_t* from_child)
+{
+    TOP_INFO("xp2pudp_t close successful,cur_thread_id=%d,object_id(%d) for this(%p)",cur_thread_id,get_obj_id(),this);
+    status = 0;
+    mtx.lock();
+    return xudp_t::on_endpoint_close(error_code,cur_thread_id,timenow_ms,from_child);
+}
+
+//notify upper layer,child endpoint update keeplive status
+bool xp2pudp_t::on_endpoint_keepalive(const std::string & _payload,const int32_t cur_thread_id,const uint64_t timenow_ms,xendpoint_t* from_child)
+{
+    //note: _payload is from send_keepalive_packet();
+//        printf(" xp2pudp_t<--keepalive,handle(%d),local[%s : %d]-[%d : %d] vs peer[%s : %d]-[%d : %d]; thread_id=%d,object_id(%lld)\n",get_handle(), get_local_ip_address().c_str(),get_local_real_port(),get_local_logic_port(),get_local_logic_port_token(),get_peer_ip_address().c_str(),get_peer_real_port(),get_peer_logic_port(),get_peer_logic_port_token(),get_thread_id(),get_obj_id());
+    status = 2;
+    return xudp_t::on_endpoint_keepalive(_payload,cur_thread_id,timenow_ms,from_child);
+}
+int32_t xp2pudp_t::connect(const std::string& target_ip,const uint16_t target_port, XbaseUdpServer* udp_server){
+	listen_server_ = udp_server;
+	status = 1;
+	return xudp_t::connect(target_ip, target_port);
+}
+int xp2pudp_t::send(xpacket_t& packet)
+{
+    mtx.lock();
+    xslsocket_t::send(0, 0, 0, 0, packet, 0, 0, NULL);
+    mtx.unlock();
+    return enum_xcode_successful;
+}
+
+int32_t xp2pudp_t::recv(uint64_t from_xip_addr_low,uint64_t from_xip_addr_high,uint64_t to_xip_addr_low,uint64_t to_xip_addr_high,xpacket_t & packet,int32_t cur_thread_id,uint64_t timenow_ms,xendpoint_t* from_child_end) {
+    if (packet.get_size() <= enum_xip2_header_len) {
+        TOP_ERROR("packet.size(%d) invalid", (int)packet.get_size());
+        return 0;
+    }
+
+    //multi_thread_message_handler_->HandleMessage(packet);
+
+    // just for now, will delete MultiThreadHandler in the future
+    TOP_INFO("Recv size: %d, from:%s:%d", packet.get_body().size(),packet.get_from_ip_addr().c_str(), packet.get_from_ip_port());
+    if (listen_server_ == NULL) {
+        TOP_INFO("listen_server_ is null");
+        return enum_xcode_successful;
+    }
+    if (listen_server_->callback_) {
+        TOP_DEBUG("using callback");
+        listen_server_->callback_(
+                from_xip_addr_low,
+                from_xip_addr_high,
+                to_xip_addr_low,
+                to_xip_addr_high,
+                packet,
+                cur_thread_id,
+                timenow_ms,
+                from_child_end);
+    }
+
+    num++;
+    //go default handle,where may deliver packet to parent object
+    return xsocket_t::recv(from_xip_addr_low,from_xip_addr_high,to_xip_addr_low,to_xip_addr_high,packet,cur_thread_id,timenow_ms,from_child_end);
+}
+
+XbaseUdpServer::XbaseUdpServer(
+        base::xcontext_t & _context,
+        int32_t target_thread_id,
+        xfd_handle_t native_handle,
+        MultiThreadHandler* message_handler)
+        : xudplisten_t(_context, NULL, target_thread_id, native_handle),
+          multi_thread_message_handler_(message_handler) {}
+
+XbaseUdpServer::~XbaseUdpServer() {
+//    Stop();
+}
+xslsocket_t* XbaseUdpServer::create_xslsocket(xendpoint_t * parent,xfd_handle_t handle,xsocket_property & property, int32_t cur_thread_id,uint64_t timenow_ms) {
+//  return new xp2pudp_t(*get_context(),parent,get_thread_id(),handle,property);
+    udp_ptr = new xp2pudp_t(*get_context(),parent,get_thread_id(),handle,property, this);
+//    udp_ptr->listen_server_ = this;
+    TOP_INFO("create_xslsocket");
+    return udp_ptr;
+}
+
+void XbaseUdpServer::register_on_receive_callback(on_receive_callback_t callback) {
+    std::unique_lock<std::mutex> lock(callback_mutex_);
+    assert(callback_ == nullptr);
+    TOP_DEBUG("register callback for XbaseUdpServer");
+    callback_ = callback;
+}
+
+void XbaseUdpServer::unregister_on_receive_callback() {
+    std::unique_lock<std::mutex> lock(callback_mutex_);
+    callback_ = nullptr;
+}
+
+void XbaseUdpServer::Stop() {
+    std::unique_lock<std::mutex> lock(xudp_mutex_);
+    std::map<std::string, xp2pudp_t*>::iterator it;
+    for (it= xudp_client_map.begin(); it != xudp_client_map.end(); ++it) {
+        xp2pudp_t* peer_xudp_socket;
+        peer_xudp_socket = it->second;
+        if(peer_xudp_socket != NULL)
+        {
+            peer_xudp_socket->close();
+            peer_xudp_socket->release_ref();
+        }
+    }
+    xudp_client_map.clear();
+}
+
+int XbaseUdpServer::SendToLocal(base::xpacket_t& packet) {
+    if (packet.get_size() <= enum_xip2_header_len) {
+        TOP_ERROR("<blueshi> packet.size(%d) invalid", (int)packet.get_size());
+        return kTransportFailed;
+    }
+    multi_thread_message_handler_->HandleMessage(packet);
+    return kTransportSuccess;
+}
+
+int XbaseUdpServer::SendToLocal(const xbyte_buffer_t& data) {
+    uint8_t local_buf[kUdpPacketBufferSize];
+    base::xpacket_t packet(base::xcontext_t::instance(), local_buf, sizeof(local_buf), 0, false);
+    packet.get_body().push_back((uint8_t*)data.data(), data.size());  // NOLINT
+    return kTransportSuccess;
+}
+
+int XbaseUdpServer::SendData(
+        const xbyte_buffer_t& data,
+        const std::string& peer_ip,
+        uint16_t peer_port) {
+    uint8_t local_buf[kUdpPacketBufferSize];
+    base::xpacket_t packet(base::xcontext_t::instance(), local_buf, sizeof(local_buf), 0, false);
+    packet.get_body().push_back((uint8_t*)data.data(), data.size());  // NOLINT
+    packet.set_to_ip_addr(peer_ip);
+    packet.set_to_ip_port(peer_port);
+    AddXip2Header(packet);
+    return SendData(packet);
+}
+int XbaseUdpServer::SendData(base::xpacket_t& packet) {
+    if (packet.get_to_ip_port() == 0) {
+        TOP_WARN("port is zero.");
+        transport::protobuf::RoutingMessage pro_message;
+        if (!pro_message.ParseFromArray((const char*)packet.get_body().data() + enum_xip2_header_len, packet.get_body().size() - enum_xip2_header_len))
+        {
+            TOP_ERROR("Message ParseFromString from string failed!");
+            return kTransportFailed;
+        }
+        TOP_INFO("SendData error:%d,%s,%d", pro_message.type(), HexEncode(pro_message.des_node_id()).c_str(), pro_message.id());
+        return kTransportFailed;
+    }
+    Xip2Header* xip2_header = ParserXip2Header(packet);
+    if (!xip2_header) {
+        return kTransportFailed;
+    }
+    TOP_INFO("Send size:[%d] in xbase1, to_xaddr_token:%d", packet.get_body().size(), xip2_header->to_xaddr_token);
+//  printf("ip:%s,%s,%s,port:%d,%d,%d\n", packet.get_to_ip_addr().c_str(),packet.get_from_ip_addr().c_str(), xsocket_t::get_local_ip_address().c_str(), packet.get_to_ip_port(),packet.get_from_ip_port(), xsocket_t::get_local_real_port());
+    if (packet.get_to_ip_addr() == xsocket_t::get_local_ip_address() && packet.get_to_ip_port()==xsocket_t::get_local_real_port()) {
+//      printf("send to local addr.\n");
+        packet.set_from_ip_addr(packet.get_to_ip_addr());
+        packet.set_from_ip_port(packet.get_to_ip_port());
+        SendToLocal(packet);
+        return kTransportFailed;
+    }
+    packet.set_from_ip_addr(xsocket_t::get_local_ip_address());
+    packet.set_from_ip_port(xsocket_t::get_local_real_port());
+
+// add connect for xudp
+    std::map<std::string, xp2pudp_t*>::iterator iter;
+
+    xudp_mutex_.lock();
+    iter = xudp_client_map.find(packet.get_to_ip_addr() +":" + std::to_string(packet.get_to_ip_port()));
+    xp2pudp_t * peer_xudp_socket = NULL;
+    if (iter == xudp_client_map.end()) {
+        xudp_mutex_.unlock();
+        TOP_INFO("not find:%s", std::string(packet.get_to_ip_addr() +":" + std::to_string(packet.get_to_ip_port())).c_str());
+        peer_xudp_socket = (xp2pudp_t*)xudplisten_t::create_xslsocket(enum_socket_type_xudp);
+        peer_xudp_socket->connect(packet.get_to_ip_addr(), packet.get_to_ip_port(), this);
+
+//      AddXudp(packet.get_to_ip_addr() +":" + std::to_string(packet.get_to_ip_port()), peer_xudp_socket);
+    
+        xudp_mutex_.lock();
+        xudp_client_map[packet.get_to_ip_addr() +":" + std::to_string(packet.get_to_ip_port())] = peer_xudp_socket;
+        
+        std::map<std::string, xp2pudp_t*>::iterator it;
+        for (it= xudp_client_map.begin(); it != xudp_client_map.end(); ++it) {
+            TOP_INFO("print xudp map:%s,%p",it->first.c_str(), it->second);
+        }   
+        xudp_mutex_.unlock();
+        
+    } else {
+        peer_xudp_socket = xudp_client_map[packet.get_to_ip_addr() +":" + std::to_string(packet.get_to_ip_port())];
+        xudp_mutex_.unlock();
+        TOP_INFO("find:%s", std::string(packet.get_to_ip_addr() +":" + std::to_string(packet.get_to_ip_port())).c_str());
+        if (peer_xudp_socket->GetStatus() == 0) {
+            TOP_INFO("reconnect...");
+            peer_xudp_socket->connect(packet.get_to_ip_addr(), packet.get_to_ip_port(), this);
+        }
+    }
+    if (peer_xudp_socket->send(packet) != enum_xcode_successful) {
+    //if (this->send(xip2_header->from_xaddr_low, xip2_header->from_xaddr_high, xip2_header->to_xaddr_low, xip2_header->to_xaddr_high, packet, 0, 0, NULL) != enum_xcode_successful) {
+        TOP_ERROR("send xpacket failed!packet size is :%d\n",packet.get_size());
+        return kTransportFailed;
+    }
+
+    TOP_DEBUG("Send size:[%d] in xbase2, to_xaddr_token:%d", packet.get_body().size(), xip2_header->to_xaddr_token);
+    return kTransportSuccess;
+}
+
+// parse xip2_header from packet
+Xip2Header* XbaseUdpServer::ParserXip2Header(base::xpacket_t& packet)
+{
+    if(packet.get_size() < enum_xip2_header_len)//test size of header and body together
+    {
+        TOP_WARN("xip2_header_len invalid, packet_size(%d) smaller than enum_xip2_header_len(%d)",
+                packet.get_body().size(),
+                enum_xip2_header_len);
+        return nullptr;
+    }
+    if(packet.get_header().size() > 0)
+        return (Xip2Header*)(packet.get_header().data());
+    else
+        return (Xip2Header*)(packet.get_body().data());
+}
+
+
+void XbaseUdpServer::AddXip2Header(base::xpacket_t& packet) {
+    _xip2_header header;
+    memset(&header, 0, sizeof(header));  // TODO(blueshi): init header
+    packet.get_body().push_front((uint8_t*)&header, enum_xip2_header_len);
+}
+
+bool XbaseUdpServer::GetSocketStatus() {
+    if (this->get_socket_status() != top::base::enum_socket_status_connected) {
+        return false;
+    }
+    return true;
+}
+int XbaseUdpServer::AddXudp(const std::string& ip_port, xp2pudp_t* xudp) {
+//    std::unique_lock<std::mutex> lock(xudp_mutex_);
+//  xudp_client_map[ip_port] = xudp;
+    std::map<std::string, xp2pudp_t*>::iterator iter;
+    
+    xudp_mutex_.lock();
+    iter = xudp_client_map.find(ip_port);
+    if (iter == xudp_client_map.end()) {
+        // AddXudp(xslsocket_t::get_peer_ip_address() +":" + std::to_string(xslsocket_t::get_peer_real_port()), this);
+        xudp_client_map[ip_port] = xudp;
+        std::map<std::string, xp2pudp_t*>::iterator it;
+        for (it= xudp_client_map.begin(); it != xudp_client_map.end(); ++it) {
+            TOP_INFO("conn:print xudp map:%s,%p",it->first.c_str(), it->second);
+        }       
+        xudp_mutex_.unlock();
+    } else {
+        xudp_mutex_.unlock();
+        TOP_INFO("find xudp client.");
+    }
+
+    return 0;
+}
+UdpTransport::UdpTransport()
+        : io_thread_(NULL),
+          udp_socket_(NULL),
+          local_ip_(),
+          local_port_(0),
+          socket_connected_(false),
+          udp_handle_(0),
+          message_handler_(NULL) {}
+
+UdpTransport::~UdpTransport() {
+//    Stop();
+}
+
+int UdpTransport::Start(
+        const std::string& local_ip,
+        uint16_t local_port,
+        MultiThreadHandler* message_handler) {
+    TOP_INFO("UdpTransport::Start(%s:%d) ...", local_ip.c_str(), local_port);
+
+    io_thread_ = top::base::xiothread_t::create_thread(
+        top::base::xcontext_t::instance(), 0, -1);
+    if (io_thread_ == NULL) {
+        TOP_ERROR("create xio thread failed!");
+        return kTransportFailed;
+    }
+
+    udp_handle_ = base::xsocket_utl::udp_listen(
+            local_ip,
+            local_port);
+    if (udp_handle_ <= 0) {
+        TOP_ERROR("udp listen failed!");
+        return kTransportFailed;
+    }
+
+    base::xsocket_utl::set_recv_buffer(udp_handle_, 20 * 1024 * 1024);
+    message_handler_ = message_handler;
+
+    udp_socket_ = new XbaseUdpServer(
+            base::xcontext_t::instance(),
+            io_thread_->get_thread_id(),
+            udp_handle_,
+            message_handler_);
+    udp_socket_->start_read(0);
+    local_ip_ = udp_socket_->get_local_ip_address();
+    local_port_ = udp_socket_->get_local_real_port();
+    TOP_INFO("UdpTransport::Start() success[%s:%d]", this->local_ip().c_str(), this->local_port());
+    socket_connected_ = true;
+    return kTransportSuccess;
+}
+
+void UdpTransport::Stop() {
+    if (udp_socket_) {
+        udp_socket_->Stop();
+        udp_socket_->close();
+        udp_socket_->release_ref();
+    }
+    udp_socket_ = nullptr;
+    if (io_thread_) {
+        io_thread_->close();
+        io_thread_->release_ref();
+    }
+    io_thread_ = nullptr;
+    socket_connected_ = false;
+}
+
+int UdpTransport::SendData(
+        const xbyte_buffer_t& data,
+        const std::string& peer_ip,
+        uint16_t peer_port) {
+    if (!socket_connected_) {
+        TOP_ERROR("udp socket not alive, SendData failed");
+        return kTransportFailed;
+    }
+    if (udp_socket_ == NULL) {
+        TOP_ERROR("udp socket is NULL");
+        return kTransportFailed;
+    }
+    return udp_socket_->SendData(data, peer_ip, peer_port);
+}
+
+int UdpTransport::SendData(base::xpacket_t& packet) {
+    if (!socket_connected_) {
+        TOP_ERROR("udp socket not alive, SendData failed");
+        return kTransportFailed;
+    }
+    if (udp_socket_ == NULL) {
+        TOP_ERROR("udp socket is NULL");
+        return kTransportFailed;
+    }
+
+    // TODO(smaug(usually not add header here
+    //udp_socket_->AddXip2Header(packet);
+    return udp_socket_->SendData(packet);
+}
+
+
+int UdpTransport::SendToLocal(base::xpacket_t& packet) {
+    if (!socket_connected_) {
+        TOP_ERROR("udp socket not alive, SendData failed");
+        return kTransportFailed;
+    }
+    if (udp_socket_ == NULL) {
+        TOP_ERROR("udp socket is NULL");
+        return kTransportFailed;
+    }
+
+    // usually not add header here
+    udp_socket_->AddXip2Header(packet);
+    return udp_socket_->SendToLocal(packet);
+}
+
+int UdpTransport::SendToLocal(const xbyte_buffer_t& data) {
+    uint8_t local_buf[kUdpPacketBufferSize];
+    base::xpacket_t packet(base::xcontext_t::instance(), local_buf, sizeof(local_buf), 0, false);
+    packet.get_body().push_back((uint8_t*)data.data(), data.size());  // NOLINT
+    return SendToLocal(packet);
+}
+
+int UdpTransport::ReStartServer() {
+    std::unique_lock<std::mutex> lock(restart_xbase_udp_server_mutex_);
+
+    if (socket_connected_) {
+        TOP_ERROR("udp socket alive, there is no need to restart xbase udp socket");
+        return kTransportFailed;
+    }
+    if (!udp_socket_){
+        TOP_ERROR("udp_socket_ not ready yet, ReStartServer forbidden");
+        return kTransportFailed;
+    }
+
+    // stop first
+    udp_socket_->Stop();
+    udp_socket_->close();
+    udp_socket_->release_ref();
+    udp_socket_ = nullptr;
+
+    // then restart
+    udp_handle_ = base::xsocket_utl::udp_listen(
+            local_ip_,
+            local_port_);
+    if (udp_handle_ <= 0) {
+        TOP_ERROR("udp listen failed!");
+        return kTransportFailed;
+    }
+
+    udp_socket_ = new XbaseUdpServer(
+            base::xcontext_t::instance(),
+            io_thread_->get_thread_id(),
+            udp_handle_,
+            message_handler_);
+    udp_socket_->start_read(0);
+    socket_connected_ = true;
+    TOP_INFO("UdpTransport::ReStartServer() success");
+    return kTransportSuccess;
+}
+
+int UdpTransport::get_socket_status() {
+    if (!socket_connected_) {
+        TOP_ERROR("UdpTransport::get_udp_socket_status canceled, XbaseUdpServer maybe restarting");
+        return kUdpSocketStatusCanceled;
+    }
+    if (!udp_socket_) {
+        TOP_ERROR("udp socket null");
+        return kUdpSocketStatusNull;
+    }
+    if (udp_socket_->GetSocketStatus()) {
+        return kUdpSocketStatusConnected;
+    } else {
+        socket_connected_ = false;
+        TOP_INFO("XbaseUdpServer not connected, set socket_connected_ false");
+        return kUdpSocketStatusNotConnected;
+    }
+}
+
+void UdpTransport::register_on_receive_callback(on_receive_callback_t callback) {
+    if (udp_socket_) {
+        udp_socket_->register_on_receive_callback(callback);
+    }
+}
+
+void UdpTransport::unregister_on_receive_callback() {
+    if (udp_socket_) {
+        udp_socket_->unregister_on_receive_callback();
+    }
+}
+
+
+}  // namespace transport
+
+}  // namespace top

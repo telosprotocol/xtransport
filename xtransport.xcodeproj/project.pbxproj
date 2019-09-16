@@ -1,0 +1,354 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		889F5C0F22BF674D006CD0F3 /* raw_udp_socket.cc in Sources */ = {isa = PBXBuildFile; fileRef = 889F5C0D22BF674D006CD0F3 /* raw_udp_socket.cc */; };
+		889F5C1222C5C189006CD0F3 /* udp_transport.cc in Sources */ = {isa = PBXBuildFile; fileRef = 889F5C1022C5C189006CD0F3 /* udp_transport.cc */; };
+		889F5C1322C5C189006CD0F3 /* xudp_socket.cc in Sources */ = {isa = PBXBuildFile; fileRef = 889F5C1122C5C189006CD0F3 /* xudp_socket.cc */; };
+		99FA78E722B2730300B5D6BE /* message_manager.h in Headers */ = {isa = PBXBuildFile; fileRef = 99FA78D422B2730300B5D6BE /* message_manager.h */; };
+		99FA78E822B2730300B5D6BE /* multi_message_handler.h in Headers */ = {isa = PBXBuildFile; fileRef = 99FA78D522B2730300B5D6BE /* multi_message_handler.h */; };
+		99FA78EA22B2730300B5D6BE /* transport.pb.h in Headers */ = {isa = PBXBuildFile; fileRef = 99FA78D822B2730300B5D6BE /* transport.pb.h */; };
+		99FA78EB22B2730300B5D6BE /* message_manager.cc in Sources */ = {isa = PBXBuildFile; fileRef = 99FA78DB22B2730300B5D6BE /* message_manager.cc */; };
+		99FA78EC22B2730300B5D6BE /* multi_message_handler.cc in Sources */ = {isa = PBXBuildFile; fileRef = 99FA78DC22B2730300B5D6BE /* multi_message_handler.cc */; };
+		99FA78EE22B2730300B5D6BE /* transport.pb.cc in Sources */ = {isa = PBXBuildFile; fileRef = 99FA78DE22B2730300B5D6BE /* transport.pb.cc */; };
+		99FA78EF22B2730300B5D6BE /* transport_message_register.cc in Sources */ = {isa = PBXBuildFile; fileRef = 99FA78DF22B2730300B5D6BE /* transport_message_register.cc */; };
+		99FA78F122B2730300B5D6BE /* transport_message_register.h in Headers */ = {isa = PBXBuildFile; fileRef = 99FA78E122B2730300B5D6BE /* transport_message_register.h */; };
+		99FA78F222B2730300B5D6BE /* transport.h in Headers */ = {isa = PBXBuildFile; fileRef = 99FA78E222B2730300B5D6BE /* transport.h */; };
+		99FA78F322B2730300B5D6BE /* udp_transport.h in Headers */ = {isa = PBXBuildFile; fileRef = 99FA78E422B2730300B5D6BE /* udp_transport.h */; };
+		99FA78F422B2730300B5D6BE /* transport_utils.h in Headers */ = {isa = PBXBuildFile; fileRef = 99FA78E622B2730300B5D6BE /* transport_utils.h */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		889F5C0D22BF674D006CD0F3 /* raw_udp_socket.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = raw_udp_socket.cc; sourceTree = "<group>"; };
+		889F5C1022C5C189006CD0F3 /* udp_transport.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = udp_transport.cc; sourceTree = "<group>"; };
+		889F5C1122C5C189006CD0F3 /* xudp_socket.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = xudp_socket.cc; sourceTree = "<group>"; };
+		99FA789B22B271DC00B5D6BE /* libxtransport.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libxtransport.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		99FA78D422B2730300B5D6BE /* message_manager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = message_manager.h; sourceTree = "<group>"; };
+		99FA78D522B2730300B5D6BE /* multi_message_handler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = multi_message_handler.h; sourceTree = "<group>"; };
+		99FA78D822B2730300B5D6BE /* transport.pb.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = transport.pb.h; sourceTree = "<group>"; };
+		99FA78D922B2730300B5D6BE /* transport.proto */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = transport.proto; sourceTree = "<group>"; };
+		99FA78DB22B2730300B5D6BE /* message_manager.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = message_manager.cc; sourceTree = "<group>"; };
+		99FA78DC22B2730300B5D6BE /* multi_message_handler.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = multi_message_handler.cc; sourceTree = "<group>"; };
+		99FA78DE22B2730300B5D6BE /* transport.pb.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = transport.pb.cc; sourceTree = "<group>"; };
+		99FA78DF22B2730300B5D6BE /* transport_message_register.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = transport_message_register.cc; sourceTree = "<group>"; };
+		99FA78E122B2730300B5D6BE /* transport_message_register.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = transport_message_register.h; sourceTree = "<group>"; };
+		99FA78E222B2730300B5D6BE /* transport.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = transport.h; sourceTree = "<group>"; };
+		99FA78E422B2730300B5D6BE /* udp_transport.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = udp_transport.h; sourceTree = "<group>"; };
+		99FA78E622B2730300B5D6BE /* transport_utils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = transport_utils.h; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		99FA789822B271DC00B5D6BE /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		99FA789222B271DC00B5D6BE = {
+			isa = PBXGroup;
+			children = (
+				99FA78D222B272F200B5D6BE /* source */,
+				99FA789C22B271DC00B5D6BE /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		99FA789C22B271DC00B5D6BE /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				99FA789B22B271DC00B5D6BE /* libxtransport.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		99FA78D222B272F200B5D6BE /* source */ = {
+			isa = PBXGroup;
+			children = (
+				99FA78D322B2730300B5D6BE /* message_manager */,
+				99FA78D722B2730300B5D6BE /* proto */,
+				99FA78DA22B2730300B5D6BE /* src */,
+				99FA78E122B2730300B5D6BE /* transport_message_register.h */,
+				99FA78E222B2730300B5D6BE /* transport.h */,
+				99FA78E322B2730300B5D6BE /* udp_transport */,
+				99FA78E522B2730300B5D6BE /* utils */,
+			);
+			name = source;
+			sourceTree = "<group>";
+		};
+		99FA78D322B2730300B5D6BE /* message_manager */ = {
+			isa = PBXGroup;
+			children = (
+				99FA78D422B2730300B5D6BE /* message_manager.h */,
+				99FA78D522B2730300B5D6BE /* multi_message_handler.h */,
+			);
+			path = message_manager;
+			sourceTree = "<group>";
+		};
+		99FA78D722B2730300B5D6BE /* proto */ = {
+			isa = PBXGroup;
+			children = (
+				99FA78D822B2730300B5D6BE /* transport.pb.h */,
+				99FA78D922B2730300B5D6BE /* transport.proto */,
+			);
+			path = proto;
+			sourceTree = "<group>";
+		};
+		99FA78DA22B2730300B5D6BE /* src */ = {
+			isa = PBXGroup;
+			children = (
+				889F5C0D22BF674D006CD0F3 /* raw_udp_socket.cc */,
+				99FA78DB22B2730300B5D6BE /* message_manager.cc */,
+				889F5C1022C5C189006CD0F3 /* udp_transport.cc */,
+				889F5C1122C5C189006CD0F3 /* xudp_socket.cc */,
+				99FA78DC22B2730300B5D6BE /* multi_message_handler.cc */,
+				99FA78DE22B2730300B5D6BE /* transport.pb.cc */,
+				99FA78DF22B2730300B5D6BE /* transport_message_register.cc */,
+			);
+			path = src;
+			sourceTree = "<group>";
+		};
+		99FA78E322B2730300B5D6BE /* udp_transport */ = {
+			isa = PBXGroup;
+			children = (
+				99FA78E422B2730300B5D6BE /* udp_transport.h */,
+			);
+			path = udp_transport;
+			sourceTree = "<group>";
+		};
+		99FA78E522B2730300B5D6BE /* utils */ = {
+			isa = PBXGroup;
+			children = (
+				99FA78E622B2730300B5D6BE /* transport_utils.h */,
+			);
+			path = utils;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXHeadersBuildPhase section */
+		99FA789922B271DC00B5D6BE /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				99FA78E722B2730300B5D6BE /* message_manager.h in Headers */,
+				99FA78F122B2730300B5D6BE /* transport_message_register.h in Headers */,
+				99FA78EA22B2730300B5D6BE /* transport.pb.h in Headers */,
+				99FA78E822B2730300B5D6BE /* multi_message_handler.h in Headers */,
+				99FA78F422B2730300B5D6BE /* transport_utils.h in Headers */,
+				99FA78F222B2730300B5D6BE /* transport.h in Headers */,
+				99FA78F322B2730300B5D6BE /* udp_transport.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
+/* Begin PBXNativeTarget section */
+		99FA789A22B271DC00B5D6BE /* xtransport */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 99FA789F22B271DC00B5D6BE /* Build configuration list for PBXNativeTarget "xtransport" */;
+			buildPhases = (
+				99FA789722B271DC00B5D6BE /* Sources */,
+				99FA789822B271DC00B5D6BE /* Frameworks */,
+				99FA789922B271DC00B5D6BE /* Headers */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = xtransport;
+			productName = xtransport;
+			productReference = 99FA789B22B271DC00B5D6BE /* libxtransport.a */;
+			productType = "com.apple.product-type.library.static";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		99FA789322B271DC00B5D6BE /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0830;
+				ORGANIZATIONNAME = "Taylor Wei";
+				TargetAttributes = {
+					99FA789A22B271DC00B5D6BE = {
+						CreatedOnToolsVersion = 8.3.2;
+						ProvisioningStyle = Automatic;
+					};
+				};
+			};
+			buildConfigurationList = 99FA789622B271DC00B5D6BE /* Build configuration list for PBXProject "xtransport" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = 99FA789222B271DC00B5D6BE;
+			productRefGroup = 99FA789C22B271DC00B5D6BE /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				99FA789A22B271DC00B5D6BE /* xtransport */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXSourcesBuildPhase section */
+		99FA789722B271DC00B5D6BE /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				99FA78EF22B2730300B5D6BE /* transport_message_register.cc in Sources */,
+				889F5C1222C5C189006CD0F3 /* udp_transport.cc in Sources */,
+				99FA78EE22B2730300B5D6BE /* transport.pb.cc in Sources */,
+				99FA78EC22B2730300B5D6BE /* multi_message_handler.cc in Sources */,
+				889F5C0F22BF674D006CD0F3 /* raw_udp_socket.cc in Sources */,
+				99FA78EB22B2730300B5D6BE /* message_manager.cc in Sources */,
+				889F5C1322C5C189006CD0F3 /* xudp_socket.cc in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		99FA789D22B271DC00B5D6BE /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "c++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "-";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = c99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = ../xdepends/include;
+				MACOSX_DEPLOYMENT_TARGET = 10.12;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+				USER_HEADER_SEARCH_PATHS = "../ ../xdepends/include ../third_party";
+			};
+			name = Debug;
+		};
+		99FA789E22B271DC00B5D6BE /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "c++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "-";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = c99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = ../xdepends/include;
+				MACOSX_DEPLOYMENT_TARGET = 10.12;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = macosx;
+				USER_HEADER_SEARCH_PATHS = "../ ../xdepends/include ../third_party";
+			};
+			name = Release;
+		};
+		99FA78A022B271DC00B5D6BE /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				EXECUTABLE_PREFIX = lib;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		99FA78A122B271DC00B5D6BE /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				EXECUTABLE_PREFIX = lib;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		99FA789622B271DC00B5D6BE /* Build configuration list for PBXProject "xtransport" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				99FA789D22B271DC00B5D6BE /* Debug */,
+				99FA789E22B271DC00B5D6BE /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		99FA789F22B271DC00B5D6BE /* Build configuration list for PBXNativeTarget "xtransport" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				99FA78A022B271DC00B5D6BE /* Debug */,
+				99FA78A122B271DC00B5D6BE /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 99FA789322B271DC00B5D6BE /* Project object */;
+}

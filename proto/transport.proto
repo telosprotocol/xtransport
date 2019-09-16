@@ -1,0 +1,94 @@
+syntax = "proto2";
+
+package top.transport.protobuf;
+
+message HopInfo {
+    optional bytes node_id = 1;
+    optional bytes ip = 2;
+    optional int32 port = 3;
+}
+
+message VersionTag {
+    optional bytes version = 1;
+    optional bytes copyright = 2;
+}
+
+message RelayHopInfo {
+    // p2p network entry
+    optional bytes relay_entry_id = 1;
+    optional uint64 service_type = 2;
+    optional bool  relay_flag = 3;
+    // p2p network exit, may be equal to relay_entry_id
+    optional bytes relay_exit_id = 4; 
+}
+
+message GossipParams {
+    optional int32 reliable_level = 1;
+    optional uint32 neighber_count = 2;
+    optional uint32 stop_times = 3;
+	optional int32 gossip_type = 4;
+	optional int32 evil_rate = 5;
+	optional uint32 max_hop_num = 6;
+	optional uint64 min_dis = 7;
+	optional uint64 max_dis = 8;
+	optional uint64 left_min = 9;
+	optional uint64 right_max = 10;
+    optional uint32 left_overlap = 11;
+    optional uint32 right_overlap = 12;
+	optional uint32 switch_layer_hop_num = 13;
+	optional bytes header_hash = 14;
+	optional bytes block = 15;
+	optional uint32 ign_bloomfilter_level = 16;
+	optional bool diff_net = 17;
+    repeated uint32 pass_node = 18;
+    optional uint32 msg_hash = 19;
+	optional bytes pre_ip = 20;
+	optional int32 pre_port = 21;
+}
+
+message GossipSyncBlockData {
+	optional bytes header_hash = 1;
+	optional bytes block = 2;
+}
+
+message RoutingMessage {
+    optional bytes src_node_id = 1;
+    optional bytes des_node_id = 2;
+    optional int32 type = 3;
+    optional bytes data = 4;
+    optional uint32 id = 5;
+    optional uint32 ack_id = 6;
+    optional uint32 hop_num = 7;
+    repeated HopInfo hop_nodes = 8;
+    optional int32 retry = 9;
+    // message from client or send to client (relayed mode), this kind of message will be relayed by the first node
+    optional bool  client_msg = 10;
+    // for the first relay node of request_msg or the last relay node of response_msg
+    optional bool  relay_flag = 11;
+    // flag of request or response
+    optional bool  request_type = 12;
+    // client node id
+    optional bytes client_id = 13;
+    // sendtoclosest node,if dest_node is in routing table ,set direct_mode true
+    optional bool   direct_mode = 14;
+    optional uint64 src_service_type = 15;
+    optional uint64 des_service_type = 16;
+    // for smartobject
+    optional uint32 status = 17;
+    // attention: version_tag must set 21, can not not not change(keep same with client, so client can work)
+    optional VersionTag version_tag = 18;
+    optional bool is_root = 19;
+    repeated uint64 bloomfilter = 20;
+    repeated RelayHopInfo relay_hop_info = 21;
+    optional bool multi_relay = 22;
+    // just for test, do not delete, ask smaug first
+    optional uint32 seq = 23;
+    optional bytes xrequest_id = 24;
+    repeated bytes trace_route = 25;
+    optional bytes xid = 26;
+    optional bool broadcast = 27;
+    optional uint32 priority = 28;
+    optional GossipParams gossip = 29;
+    optional bool enable_ack = 30;
+	optional string debug = 31;
+}

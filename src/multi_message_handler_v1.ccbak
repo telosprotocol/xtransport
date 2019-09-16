@@ -1,0 +1,195 @@
+// Copyright (c) 2017-2019 Telos Foundation & contributors
+// Distributed under the MIT software license, see the accompanying
+// file COPYING or http://www.opensource.org/licenses/mit-license.php.
+
+#include "xtransport/message_manager/multi_message_handler.h"
+
+#include <iostream>
+
+#include "xpbase/base/rand_util.h"
+#include "xpbase/base/top_log.h"
+#include "xtransport/message_manager/message_manager_intf.h"
+
+namespace top {
+
+namespace transport {
+
+static const uint32_t kMessageHandlerThreadCount = 10;
+static const uint32_t kMessageBatchGetNum = 50;
+
+ThreadHandler::ThreadHandler(
+        std::shared_ptr<MultiThreadHandler> base_handler,
+        std::mutex& mutex,
+        std::condition_variable& cond_var)
+        : message_handle_thread_ptr_(nullptr),
+          mutex_(mutex),
+          cond_var_(cond_var),
+          destroy_(false),
+          base_handler_(base_handler) {
+    message_handle_thread_ptr_.reset(new std::thread(&ThreadHandler::HandleMessage, this));
+}
+
+void ThreadHandler::register_on_dispatch_callback(on_dispatch_callback_t callback) {
+    std::unique_lock<std::mutex> lock(callback_mutex_);
+    assert(callback_ == nullptr);
+    callback_ = callback;
+}
+
+void ThreadHandler::unregister_on_dispatch_callback() {
+    std::unique_lock<std::mutex> lock(callback_mutex_);
+    callback_ = nullptr;
+}
+
+
+ThreadHandler::~ThreadHandler() {
+    Join();
+    TOP_INFO("ThreadHandler thread joined");
+}
+
+void ThreadHandler::Join() {
+    destroy_ = true;
+    {
+        std::lock_guard<std::mutex> lock(mutex_);
+        cond_var_.notify_all();
+    }
+
+    if (message_handle_thread_ptr_) {
+        message_handle_thread_ptr_->join();
+        message_handle_thread_ptr_.reset();
+        message_handle_thread_ptr_ = nullptr;
+    }
+}
+
+void ThreadHandler::HandleMessage() {
+    while (!destroy_) {
+        while (!destroy_) {
+            std::shared_ptr<QueueObject> obj = base_handler_->GetMessageFromQueue();
+            if (!obj) {
+                break;
+            }
+            transport::protobuf::RoutingMessage& msg = *(obj->message_ptr);
+            msg.set_hop_num(msg.hop_num() + 1);
+            if (callback_) {
+                callback_(msg, *(obj->packet_ptr));
+            } else {
+                MessageManagerIntf::Instance()->HandleMessage(msg, *(obj->packet_ptr));
+            }
+            TOP_NETWORK_DEBUG_FOR_PROTOMESSAGE("transport handled", msg);
+        }
+        /*
+        {
+            std::unique_lock<std::mutex> lock(mutex_);
+            cond_var_.wait_for(lock, std::chrono::milliseconds(10));
+        }
+        */
+        SleepUs(10 * 1000);
+    }
+}
+
+MultiThreadHandler::MultiThreadHandler() : thread_vec_() {
+    for (uint32_t i = 0; i <= kMessageMaxPriority; ++i) {
+        priority_queue_map_[i] = std::queue<std::shared_ptr<QueueObject>>();
+    }
+}
+
+MultiThreadHandler::~MultiThreadHandler() {
+    Join();
+}
+
+std::shared_ptr<QueueObject> MultiThreadHandler::GetMessageFromQueue() {
+    std::unique_lock<std::mutex> lock(priority_queue_map_mutex_);
+    for (uint32_t i = 0; i <= kMessageMaxPriority; ++i) {
+        if (!priority_queue_map_[i].empty()) {
+            std::shared_ptr<QueueObject> msg_obj = priority_queue_map_[i].front();
+            priority_queue_map_[i].pop();
+            return msg_obj;
+        }
+    }
+    
+    return nullptr;
+}
+
+void MultiThreadHandler::Init() {
+    TOP_INFO("MultiThreadHandler::Init() ...");
+    std::unique_lock<std::mutex> lock(inited_mutex_);
+    if (inited_) {
+        TOP_WARN("MultiThreadHandler::Init() before");
+        return;
+    }
+
+    for (uint32_t i = 0; i < kMessageHandlerThreadCount; ++i) {
+        thread_vec_.push_back(std::make_shared<ThreadHandler>(
+                shared_from_this(),
+                mutex_,
+                cond_var_));
+    }
+    inited_ = true;
+    TOP_INFO("MultiThreadHandler::Init() success");
+}
+
+void MultiThreadHandler::register_on_dispatch_callback(on_dispatch_callback_t callback) {
+    for (auto& th : thread_vec_) {
+        th->register_on_dispatch_callback(callback);
+    }
+}
+
+void MultiThreadHandler::unregister_on_dispatch_callback() {
+    for (auto& th : thread_vec_) {
+        th->unregister_on_dispatch_callback();
+    }
+}
+
+
+void MultiThreadHandler::Join() {
+    std::unique_lock<std::mutex> lock(inited_mutex_);
+    if (!inited_) {
+        return;
+    }
+
+    for (uint32_t i = 0; i < thread_vec_.size(); ++i) {
+        thread_vec_[i]->Join();
+    }
+    thread_vec_.clear();
+    inited_ = false;
+}
+
+void MultiThreadHandler::HandleMessage(base::xpacket_t& packet) {
+    std::shared_ptr<transport::protobuf::RoutingMessage> message_ptr;
+    message_ptr.reset(new transport::protobuf::RoutingMessage());
+    
+    std::string content(
+        (const char*)packet.get_body().data() + enum_xip2_header_len,
+        packet.get_body().size() - enum_xip2_header_len);
+    if (!message_ptr->ParseFromString(content)) {
+        TOP_ERROR("Message ParseFromString from string failed!");
+        return;
+    }
+
+    std::shared_ptr<base::xpacket_t> packet_ptr;
+    packet_ptr.reset(new base::xpacket_t());
+    *packet_ptr = packet;
+    if (thread_vec_.empty()) {
+        return;
+    }
+
+    {
+        std::unique_lock<std::mutex> lock(priority_queue_map_mutex_);
+        uint32_t priority = kMessageMaxPriority;
+        if (message_ptr->has_priority() && (message_ptr->priority() < kMessageMaxPriority)) {
+            priority = message_ptr->priority();
+        }
+        priority_queue_map_[priority].push(std::make_shared<QueueObject>(message_ptr, packet_ptr));
+			transport::protobuf::RoutingMessage& msg = *(message_ptr);
+		TOP_NETWORK_DEBUG_FOR_PROTOMESSAGE("transport push to queue", msg);
+    }
+/*
+    {
+        std::lock_guard<std::mutex> lock(mutex_);
+        cond_var_.notify_one();
+    }*/
+}
+
+}  // namespace transport
+
+}  // namespace top
+

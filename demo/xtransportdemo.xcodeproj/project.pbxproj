@@ -1,0 +1,348 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		88D1615522B28D84001838D3 /* libxwrouter.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 88D1615422B28D84001838D3 /* libxwrouter.a */; };
+		994ECB3122B235F20035313B /* main.cc in Sources */ = {isa = PBXBuildFile; fileRef = 994ECB3022B235F20035313B /* main.cc */; };
+		994ECB3B22B236310035313B /* libxbase.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 994ECB3322B236310035313B /* libxbase.a */; };
+		994ECB3C22B236310035313B /* libxgossip.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 994ECB3422B236310035313B /* libxgossip.a */; };
+		994ECB3D22B236310035313B /* libxkad.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 994ECB3522B236310035313B /* libxkad.a */; };
+		994ECB3E22B236310035313B /* libxledger.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 994ECB3622B236310035313B /* libxledger.a */; };
+		994ECB3F22B236310035313B /* libxpbase.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 994ECB3722B236310035313B /* libxpbase.a */; };
+		994ECB4022B236310035313B /* libxtransport.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 994ECB3822B236310035313B /* libxtransport.a */; };
+		994ECB4122B236310035313B /* libxutility.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 994ECB3922B236310035313B /* libxutility.a */; };
+		994ECB4B22B2366E0035313B /* libcommon.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 994ECB4322B2366E0035313B /* libcommon.a */; };
+		994ECB4C22B2366E0035313B /* libcrypto.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 994ECB4422B2366E0035313B /* libcrypto.a */; };
+		994ECB4D22B2366E0035313B /* libcryptopp.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 994ECB4522B2366E0035313B /* libcryptopp.a */; };
+		994ECB4E22B2366E0035313B /* libjsoncpp.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 994ECB4622B2366E0035313B /* libjsoncpp.a */; };
+		994ECB4F22B2366E0035313B /* libmsgpackc.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 994ECB4722B2366E0035313B /* libmsgpackc.a */; };
+		994ECB5022B2366E0035313B /* libprotobuf.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 994ECB4822B2366E0035313B /* libprotobuf.a */; };
+		994ECB5122B2366E0035313B /* libtrezor-crypto.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 994ECB4922B2366E0035313B /* libtrezor-crypto.a */; };
+		994ECB5222B2366E0035313B /* libxcrypto.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 994ECB4A22B2366E0035313B /* libxcrypto.a */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		994ECB2422B235AC0035313B /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = /usr/share/man/man1/;
+			dstSubfolderSpec = 0;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 1;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		88D1615422B28D84001838D3 /* libxwrouter.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libxwrouter.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		994ECB2622B235AC0035313B /* xtransportdemo */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = xtransportdemo; sourceTree = BUILT_PRODUCTS_DIR; };
+		994ECB3022B235F20035313B /* main.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = main.cc; sourceTree = SOURCE_ROOT; };
+		994ECB3322B236310035313B /* libxbase.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libxbase.a; path = "../../../../../Library/Developer/Xcode/DerivedData/xtopcom-diygthlcghyghtesdvcrowskyjel/Build/Products/Debug/libxbase.a"; sourceTree = "<group>"; };
+		994ECB3422B236310035313B /* libxgossip.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libxgossip.a; path = "../../../../../Library/Developer/Xcode/DerivedData/xtopcom-diygthlcghyghtesdvcrowskyjel/Build/Products/Debug/libxgossip.a"; sourceTree = "<group>"; };
+		994ECB3522B236310035313B /* libxkad.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libxkad.a; path = "../../../../../Library/Developer/Xcode/DerivedData/xtopcom-diygthlcghyghtesdvcrowskyjel/Build/Products/Debug/libxkad.a"; sourceTree = "<group>"; };
+		994ECB3622B236310035313B /* libxledger.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libxledger.a; path = "../../../../../Library/Developer/Xcode/DerivedData/xtopcom-diygthlcghyghtesdvcrowskyjel/Build/Products/Debug/libxledger.a"; sourceTree = "<group>"; };
+		994ECB3722B236310035313B /* libxpbase.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libxpbase.a; path = "../../../../../Library/Developer/Xcode/DerivedData/xtopcom-diygthlcghyghtesdvcrowskyjel/Build/Products/Debug/libxpbase.a"; sourceTree = "<group>"; };
+		994ECB3822B236310035313B /* libxtransport.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libxtransport.a; path = "../../../../../Library/Developer/Xcode/DerivedData/xtopcom-diygthlcghyghtesdvcrowskyjel/Build/Products/Debug/libxtransport.a"; sourceTree = "<group>"; };
+		994ECB3922B236310035313B /* libxutility.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libxutility.a; path = "../../../../../Library/Developer/Xcode/DerivedData/xtopcom-diygthlcghyghtesdvcrowskyjel/Build/Products/Debug/libxutility.a"; sourceTree = "<group>"; };
+		994ECB3A22B236310035313B /* libxwrouter.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libxwrouter.a; path = "../../../../../Library/Developer/Xcode/DerivedData/xtopcom-diygthlcghyghtesdvcrowskyjel/Build/Products/Debug/libxwrouter.a"; sourceTree = "<group>"; };
+		994ECB4322B2366E0035313B /* libcommon.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libcommon.a; path = ../../xdepends/libs/mac/libcommon.a; sourceTree = "<group>"; };
+		994ECB4422B2366E0035313B /* libcrypto.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libcrypto.a; path = ../../xdepends/libs/mac/libcrypto.a; sourceTree = "<group>"; };
+		994ECB4522B2366E0035313B /* libcryptopp.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libcryptopp.a; path = ../../xdepends/libs/mac/libcryptopp.a; sourceTree = "<group>"; };
+		994ECB4622B2366E0035313B /* libjsoncpp.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libjsoncpp.a; path = ../../xdepends/libs/mac/libjsoncpp.a; sourceTree = "<group>"; };
+		994ECB4722B2366E0035313B /* libmsgpackc.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libmsgpackc.a; path = ../../xdepends/libs/mac/libmsgpackc.a; sourceTree = "<group>"; };
+		994ECB4822B2366E0035313B /* libprotobuf.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libprotobuf.a; path = ../../xdepends/libs/mac/libprotobuf.a; sourceTree = "<group>"; };
+		994ECB4922B2366E0035313B /* libtrezor-crypto.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libtrezor-crypto.a"; path = "../../xdepends/libs/mac/libtrezor-crypto.a"; sourceTree = "<group>"; };
+		994ECB4A22B2366E0035313B /* libxcrypto.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libxcrypto.a; path = ../../xdepends/libs/mac/libxcrypto.a; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		994ECB2322B235AC0035313B /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				88D1615522B28D84001838D3 /* libxwrouter.a in Frameworks */,
+				994ECB4B22B2366E0035313B /* libcommon.a in Frameworks */,
+				994ECB4C22B2366E0035313B /* libcrypto.a in Frameworks */,
+				994ECB4D22B2366E0035313B /* libcryptopp.a in Frameworks */,
+				994ECB4E22B2366E0035313B /* libjsoncpp.a in Frameworks */,
+				994ECB4F22B2366E0035313B /* libmsgpackc.a in Frameworks */,
+				994ECB5022B2366E0035313B /* libprotobuf.a in Frameworks */,
+				994ECB5122B2366E0035313B /* libtrezor-crypto.a in Frameworks */,
+				994ECB5222B2366E0035313B /* libxcrypto.a in Frameworks */,
+				994ECB3B22B236310035313B /* libxbase.a in Frameworks */,
+				994ECB3C22B236310035313B /* libxgossip.a in Frameworks */,
+				994ECB3D22B236310035313B /* libxkad.a in Frameworks */,
+				994ECB3E22B236310035313B /* libxledger.a in Frameworks */,
+				994ECB3F22B236310035313B /* libxpbase.a in Frameworks */,
+				994ECB4022B236310035313B /* libxtransport.a in Frameworks */,
+				994ECB4122B236310035313B /* libxutility.a in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		994ECB1D22B235AC0035313B = {
+			isa = PBXGroup;
+			children = (
+				994ECB2822B235AC0035313B /* xtransportdemo */,
+				994ECB2722B235AC0035313B /* Products */,
+				994ECB3222B236310035313B /* Frameworks */,
+			);
+			sourceTree = "<group>";
+		};
+		994ECB2722B235AC0035313B /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				994ECB2622B235AC0035313B /* xtransportdemo */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		994ECB2822B235AC0035313B /* xtransportdemo */ = {
+			isa = PBXGroup;
+			children = (
+				994ECB3022B235F20035313B /* main.cc */,
+			);
+			path = xtransportdemo;
+			sourceTree = "<group>";
+		};
+		994ECB3222B236310035313B /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				88D1615422B28D84001838D3 /* libxwrouter.a */,
+				994ECB4322B2366E0035313B /* libcommon.a */,
+				994ECB4422B2366E0035313B /* libcrypto.a */,
+				994ECB4522B2366E0035313B /* libcryptopp.a */,
+				994ECB4622B2366E0035313B /* libjsoncpp.a */,
+				994ECB4722B2366E0035313B /* libmsgpackc.a */,
+				994ECB4822B2366E0035313B /* libprotobuf.a */,
+				994ECB4922B2366E0035313B /* libtrezor-crypto.a */,
+				994ECB4A22B2366E0035313B /* libxcrypto.a */,
+				994ECB3322B236310035313B /* libxbase.a */,
+				994ECB3422B236310035313B /* libxgossip.a */,
+				994ECB3522B236310035313B /* libxkad.a */,
+				994ECB3622B236310035313B /* libxledger.a */,
+				994ECB3722B236310035313B /* libxpbase.a */,
+				994ECB3822B236310035313B /* libxtransport.a */,
+				994ECB3922B236310035313B /* libxutility.a */,
+				994ECB3A22B236310035313B /* libxwrouter.a */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		994ECB2522B235AC0035313B /* xtransportdemo */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 994ECB2D22B235AC0035313B /* Build configuration list for PBXNativeTarget "xtransportdemo" */;
+			buildPhases = (
+				994ECB2222B235AC0035313B /* Sources */,
+				994ECB2322B235AC0035313B /* Frameworks */,
+				994ECB2422B235AC0035313B /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = xtransportdemo;
+			productName = xtransportdemo;
+			productReference = 994ECB2622B235AC0035313B /* xtransportdemo */;
+			productType = "com.apple.product-type.tool";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		994ECB1E22B235AC0035313B /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0830;
+				ORGANIZATIONNAME = "Taylor Wei";
+				TargetAttributes = {
+					994ECB2522B235AC0035313B = {
+						CreatedOnToolsVersion = 8.3.2;
+						ProvisioningStyle = Automatic;
+					};
+				};
+			};
+			buildConfigurationList = 994ECB2122B235AC0035313B /* Build configuration list for PBXProject "xtransportdemo" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = 994ECB1D22B235AC0035313B;
+			productRefGroup = 994ECB2722B235AC0035313B /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				994ECB2522B235AC0035313B /* xtransportdemo */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXSourcesBuildPhase section */
+		994ECB2222B235AC0035313B /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				994ECB3122B235F20035313B /* main.cc in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		994ECB2B22B235AC0035313B /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "c++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "-";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = c99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = ../../xdepends/include;
+				LIBRARY_SEARCH_PATHS = ../../xdepends/lib/mac;
+				MACOSX_DEPLOYMENT_TARGET = 10.12;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+				USER_HEADER_SEARCH_PATHS = "../../ ../../xdepends/include";
+			};
+			name = Debug;
+		};
+		994ECB2C22B235AC0035313B /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "c++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "-";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = c99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = ../../xdepends/include;
+				LIBRARY_SEARCH_PATHS = ../../xdepends/lib/mac;
+				MACOSX_DEPLOYMENT_TARGET = 10.12;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = macosx;
+				USER_HEADER_SEARCH_PATHS = "../../ ../../xdepends/include";
+			};
+			name = Release;
+		};
+		994ECB2E22B235AC0035313B /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				LIBRARY_SEARCH_PATHS = (
+					../../xdepends/libs/mac,
+					../../third_party/xbase/libs/MacOS/release,
+					../../../../cbuild/libs,
+				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				USER_HEADER_SEARCH_PATHS = "../../ ../../xdepends/include ../../third_party";
+			};
+			name = Debug;
+		};
+		994ECB2F22B235AC0035313B /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				LIBRARY_SEARCH_PATHS = (
+					../../xdepends/libs/mac,
+					../../third_party/xbase/libs/MacOS/release,
+					../../../../cbuild/libs,
+				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				USER_HEADER_SEARCH_PATHS = "../../ ../../xdepends/include ../../third_party";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		994ECB2122B235AC0035313B /* Build configuration list for PBXProject "xtransportdemo" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				994ECB2B22B235AC0035313B /* Debug */,
+				994ECB2C22B235AC0035313B /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		994ECB2D22B235AC0035313B /* Build configuration list for PBXNativeTarget "xtransportdemo" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				994ECB2E22B235AC0035313B /* Debug */,
+				994ECB2F22B235AC0035313B /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 994ECB1E22B235AC0035313B /* Project object */;
+}
